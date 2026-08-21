@@ -126,7 +126,7 @@ img {
   width: clamp(84px, 12vw, 132px);
   aspect-ratio: 1;
   padding: 0px;
-  background: var(--mustard-soft);
+  background: var(--green-logo);
   border: 4px solid var(--green-logo);
   border-radius: 10px;
   box-shadow: 3px 3px 0 rgb(0 0 0 / 0.18);
@@ -226,7 +226,11 @@ img {
   border-top: 3px solid var(--lime);
   border-bottom: 3px solid var(--lime);
   overflow-x: auto;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.site-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .site-nav ul {
