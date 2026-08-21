@@ -4,6 +4,13 @@
    across the hero, and loop forever. Several can be on screen at once.
    ========================================================================== */
 
+const SITE_ROOT = (() => {
+  const self =
+    document.currentScript ||
+    [...document.querySelectorAll("script[src]")].find((s) => /js\/script\.js/.test(s.src));
+  return self ? new URL("../", self.src).href : "/";
+})();
+
 const DANMAKU = {
   wordsUrl: "words.txt",
   spawnEvery: 1300,      // ms between new words (lower = denser)
