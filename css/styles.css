@@ -1,0 +1,442 @@
+/* ==========================================================================
+   Burrito Rumbero — landing page
+   Palette pulled from the wireframe: crimson hero, mustard frames,
+   lime nav, azure button, violet mascot.
+   ========================================================================== */
+
+:root {
+  --paper: #faf6ee;
+  --ink: #22262e;
+  --crimson: #e23b2e;
+  --mustard: #b7a312;
+  --mustard-soft: #f4efd3;
+  --lime: #7bc618;
+  --lime-soft: #edf9db;
+  --green: #37820f;
+  --green-logo: #84C38F;
+  --azure: #2e9be6;
+  --azure-deep: #1d7fc4;
+  --violet: #9b4df0;
+
+  --font-display: "Baloo 2", system-ui, sans-serif;
+  --font-body: "Nunito", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--paper);
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  min-height: clamp(340px, 46vw, 540px);
+  overflow: hidden;
+  display: flex;
+  /* Painted instantly, before the hero image arrives, so there is no white
+     Set this to the average colour of your own hero image. */
+  background: linear-gradient(to bottom, #5f5041, var(--paper));
+}
+ 
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  -webkit-mask-image: linear-gradient(to bottom, rgb(0 0 0 / 1) 0%, rgb(0 0 0 / 0.05) 100%);
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 1) 0%, rgb(0 0 0 / 0.05) 100%);
+}
+
+/* --- Danmaku layer: above the hero image, below logo & button --- */
+.danmaku {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.danmaku__word {
+  position: absolute;
+  left: 100%;
+  opacity: 30%;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: #fff;
+  /* bilibili-style outline so words stay readable over any hero image */
+  text-shadow:
+    -2px -2px 0 var(--ink), 2px -2px 0 var(--ink),
+    -2px  2px 0 var(--ink), 2px  2px 0 var(--ink),
+    -2px  0   0 var(--ink), 2px  0   0 var(--ink),
+     0   -2px 0 var(--ink), 0    2px 0 var(--ink);
+  will-change: transform;
+  animation-name: danmaku-fly;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes danmaku-fly {
+  to {
+    transform: translateX(var(--fly-distance, -120vw));
+  }
+}
+
+/* --- Hero foreground: brand block + support button --- */
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(20px, 4vw, 48px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 3vw, 28px);
+}
+
+.brand__frame {
+  flex-shrink: 0;
+  width: clamp(84px, 12vw, 132px);
+  aspect-ratio: 1;
+  padding: 0px;
+  background: var(--mustard-soft);
+  border: 4px solid var(--green-logo);
+  border-radius: 10px;
+  box-shadow: 3px 3px 0 rgb(0 0 0 / 0.18);
+}
+
+.brand__frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.brand__titles {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-display);
+  line-height: 1.1;
+  color: #fff;
+  text-shadow: 0 2px 10px rgb(0 0 0 / 0.45), 0 0 2px rgb(0 0 0 / 0.6);
+}
+
+.brand__name {
+  font-size: clamp(1.7rem, 4.5vw, 2.7rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.brand__tag {
+  font-size: clamp(1.1rem, 2.8vw, 1.7rem);
+  font-weight: 600;
+  opacity: 0.92;
+}
+
+.support-btn {
+  position: relative;
+  margin-top: auto;
+  align-self: flex-end;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  letter-spacing: 0.03em;
+  color: #fff;
+  text-decoration: none;
+  background: var(--azure);
+  padding: 0.7em 1.7em;
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 rgb(0 0 0 / 0.22);
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Marching dots: a dashed gradient ring masked to the border area only,
+   so it follows the pill's rounded corners. Loops forever. */
+.support-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 3px; /* ring thickness */
+  background: repeating-linear-gradient(
+    90deg,
+    #fff 0 9px,
+    transparent 9px 18px
+  );
+  background-size: 18px 100%;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  animation: marching-dots 0.9s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes marching-dots {
+  to {
+    background-position: -18px 0;
+  }
+}
+
+.support-btn:hover,
+.support-btn:focus-visible {
+  background: var(--azure-deep);
+  transform: translate(-1px, -2px);
+  box-shadow: 5px 5px 0 rgb(0 0 0 / 0.22);
+}
+
+.support-btn:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* ==========================================================================
+   Navigation — full width, horizontally scrollable when it overflows
+   ========================================================================== */
+
+.site-nav {
+  width: 100%;
+  background: var(--lime-soft);
+  border-top: 3px solid var(--lime);
+  border-bottom: 3px solid var(--lime);
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.site-nav ul {
+  display: flex;
+  min-width: max-content;
+  list-style: none;
+}
+
+.site-nav li + li {
+  border-left: 2px solid var(--lime);
+}
+
+.site-nav a {
+  display: block;
+  padding: 14px clamp(20px, 4vw, 44px);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--green);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.site-nav a:hover,
+.site-nav a:focus-visible {
+  background: var(--lime);
+  color: #fff;
+}
+
+.site-nav a:focus-visible {
+  outline: 3px solid var(--green);
+  outline-offset: -3px;
+}
+
+.site-nav a.is-current {
+  background: var(--lime);
+  color: #fff;
+}
+
+/* ==========================================================================
+   Latest entries
+   ========================================================================== */
+
+.page {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding: clamp(24px, 4vw, 48px) clamp(16px, 4vw, 32px) clamp(48px, 8vw, 96px);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  color: var(--green);
+  margin-bottom: clamp(20px, 3vw, 36px);
+}
+
+.entries {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 × 2 on large screens */
+  gap: clamp(16px, 3vw, 30px);
+}
+
+@media (max-width: 720px) {
+  .entries {
+    grid-template-columns: repeat(2, 1fr); /* 2 × 3 on small screens */
+  }
+}
+
+.entry-card {
+  border: 4px solid var(--mustard);
+  border-radius: 12px;
+  background: var(--mustard-soft);
+  overflow: hidden;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.entry-card:hover {
+  transform: translateY(-4px) rotate(-0.6deg);
+  box-shadow: 5px 7px 0 rgb(183 163 18 / 0.35);
+}
+
+.entry-card a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.entry-card a:focus-visible {
+  outline: 3px solid var(--azure);
+  outline-offset: -3px;
+}
+
+.entry-card__thumb {
+  aspect-ratio: 1;
+  background:
+    repeating-linear-gradient(45deg,
+      var(--mustard-soft) 0 14px,
+      #fff 14px 28px);
+}
+
+.entry-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.entry-card__caption {
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-top: 3px solid var(--mustard);
+  background: var(--mustard-soft);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.site-footer {
+  padding: 20px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--ink);
+  opacity: 0.6;
+}
+
+/* ==========================================================================
+   Mascot — fixed overlay, slides up on load then swings once
+   ========================================================================== */
+
+/* Wrapper owns the vertical slide only. */
+.mascot {
+  position: fixed;
+  bottom: -4px;
+  right: clamp(8px, 4vw, 56px);
+  width: clamp(140px, 22vw, 270px);
+  z-index: 60;
+  pointer-events: none; /* never blocks clicks; hover is detected in JS */
+  transform: translateY(110%);
+  animation: mascot-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
+}
+
+@keyframes mascot-rise {
+  to { transform: translateY(0); }
+}
+
+/* Inner image owns every rotation, so slide and swing never fight. */
+.mascot img {
+  width: 100%;
+  transform-origin: 50% 100%; /* pivots on its feet */
+  filter: drop-shadow(0 6px 12px rgb(0 0 0 / 0.25));
+}
+
+/* Entrance swing + hover tilt: one lean left, one right, settle. */
+.mascot.is-swinging img {
+  animation: mascot-swing 1.3s cubic-bezier(0.36, 0.07, 0.3, 1) both;
+}
+
+@keyframes mascot-swing {
+  0%   { transform: rotate(0deg); }
+  25%  { transform: rotate(-6deg); }
+  55%  { transform: rotate(5deg); }
+  80%  { transform: rotate(-2deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Bottom-of-page shake: quick, small, side to side. */
+.mascot.is-shaking img {
+  animation: mascot-shake 0.55s ease-in-out both;
+}
+
+@keyframes mascot-shake {
+  0%, 100% { transform: translateX(0); }
+  15%      { transform: translateX(-7px); }
+  35%      { transform: translateX(6px); }
+  55%      { transform: translateX(-4px); }
+  75%      { transform: translateX(3px); }
+  90%      { transform: translateX(-1px); }
+}
+
+/* ==========================================================================
+   Reduced motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot {
+    animation: none;
+    transform: none;
+  }
+
+  .mascot img,
+  .mascot.is-swinging img,
+  .mascot.is-shaking img {
+    animation: none;
+  }
+
+  .support-btn::after {
+    animation: none;
+  }
+
+  .danmaku__word {
+    animation: none;
+    display: none;
+  }
+
+  .entry-card:hover,
+  .support-btn:hover {
+    transform: none;
+  }
+}

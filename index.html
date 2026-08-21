@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BurritoR | 3D GTS</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link
+    rel="preload"
+    as="image"
+    type="image/webp"
+    imagesrcset="assets/hero-1280.webp 1280w,
+                 assets/hero-1920.webp 1920w,
+                 assets/hero-2560.webp 2560w"
+    imagesizes="100vw"
+    fetchpriority="high">
+</head>
+<body>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    
+    <picture>
+      <source
+        type="image/avif"
+        srcset="assets/hero-1280.avif 1280w,
+                assets/hero-1920.avif 1920w,
+                assets/hero-2560.avif 2560w"
+        sizes="100vw">
+      <source
+        type="image/webp"
+        srcset="assets/hero-1280.webp 1280w,
+                assets/hero-1920.webp 1920w,
+                assets/hero-2560.webp 2560w"
+        sizes="100vw">
+      <img
+        class="hero__bg"
+        src="assets/hero-placeholder.svg"
+        srcset="assets/hero-1280.jpg 1280w,
+                assets/hero-1920.jpg 1920w,
+                assets/hero-2560.jpg 2560w"
+        sizes="100vw"
+        width="2560" height="1350"
+        alt=""
+        fetchpriority="high"
+        decoding="async">
+    </picture>
+
+    <div class="danmaku" id="danmaku" aria-hidden="true"></div>
+
+    <div class="hero__content">
+      <div class="brand">
+        <span class="brand__frame">
+          <!-- Swap this src for your 1:1 logo -->
+          <img src="assets/logo.png" alt="Burrito Rumbero logo">
+        </span>
+        <p class="brand__titles">
+          <span class="brand__name">Burrito Rumbero</span>
+          <span class="brand__tag">3D Giantess</span>
+        </p>
+      </div>
+
+      <!-- Change href to your support page URL -->
+      <a class="support-btn" href="https://example.com/support" target="_blank" rel="noopener">Support Me</a>
+    </div>
+  </header>
+
+  <!-- ============ NAV ============ -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <ul>
+      <li><a href="#" class="is-current">Home</a></li>
+      <li><a href="#">Stories</a></li>
+      <li><a href="#">Gallery</a></li>
+      <li><a href="#">Links</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- ============ LATEST ENTRIES ============ -->
+  <main class="page">
+    <h2 class="section-title">Latest Entries</h2>
+
+    <section class="entries">
+      <article class="entry-card">
+        <a href="stories/rooftop-view.html">
+          <div class="entry-card__thumb">
+            <img src="assets/entries/STAY-GROUNDED.png" alt="Rooftop View" width="700" height="700" loading="lazy" decoding="async">
+          </div>
+          <p class="entry-card__caption">Stay Grounded Ch. 2</p>
+        </a>
+      </article>
+      <article class="entry-card">
+        <a href="#">
+          <div class="entry-card__thumb">
+            <img src="assets/entries/1KIE.png" alt=""
+              width="700" height="700" loading="lazy" decoding="async">
+          </div>
+          <p class="entry-card__caption">Testimony Ch. 1</p>
+        </a>
+      </article>
+      <article class="entry-card">
+        <a href="#">
+          <div class="entry-card__thumb">
+            <img src="assets/entries/HOGAN.png" alt=""
+              width="700" height="700" loading="lazy" decoding="async">
+          </div>
+          <p class="entry-card__caption">Sundays Ch. 4</p>
+        </a>
+      </article>
+      <article class="entry-card">
+        <a href="#">
+          <div class="entry-card__thumb">
+            <img src="assets/entries/MAE-SUE.png" alt=""
+              width="700" height="700" loading="lazy" decoding="async">
+          </div>
+          <p class="entry-card__caption">Yeonwoo Entry 5</p>
+        </a>
+      </article>
+      <article class="entry-card">
+        <a href="#">
+          <div class="entry-card__thumb">
+            <img src="assets/entries/MATADORAS.png" alt=""
+              width="700" height="700" loading="lazy" decoding="async">
+          </div>
+          <p class="entry-card__caption">Matadoras Ch. 1</p>
+        </a>
+      </article>
+      <article class="entry-card">
+        <a href="#">
+          <div class="entry-card__thumb">
+            <img src="assets/entries/POLYSEMY.png" alt=""
+              width="700" height="700" loading="lazy" decoding="async">
+          </div>
+          <p class="entry-card__caption">Seven Plus Three Ch. 1</p>
+        </a>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 Burrito Rumbero</p>
+  </footer>
+
+  <!-- ============ MASCOT ============ -->
+  <!-- Slides up on load and swings once. Tilts again on hover, shakes at page bottom.
+       Swap the inner src for your transparent-background image. -->
+  <div class="mascot" id="mascot">
+    <img src="assets/rep1.png" alt="">
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

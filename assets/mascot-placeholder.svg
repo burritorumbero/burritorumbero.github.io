@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 420">
+  <!-- waving arm (drawn first so the body covers the shoulder joint) -->
+  <path d="M190 242 Q 234 208 244 140" fill="none" stroke="#9b4df0" stroke-width="38" stroke-linecap="round"/>
+  <path d="M190 242 Q 234 208 244 140" fill="none" stroke="#ffffff" stroke-width="19" stroke-linecap="round"/>
+  <!-- resting arm -->
+  <path d="M112 244 Q 92 274 96 308" fill="none" stroke="#9b4df0" stroke-width="38" stroke-linecap="round"/>
+  <path d="M112 244 Q 92 274 96 308" fill="none" stroke="#ffffff" stroke-width="19" stroke-linecap="round"/>
+  <!-- body -->
+  <path d="M104 414 L104 234 Q104 186 150 186 Q196 186 196 234 L196 414 Z"
+        fill="#ffffff" fill-opacity="0.94" stroke="#9b4df0" stroke-width="10" stroke-linejoin="round"/>
+  <!-- head -->
+  <circle cx="150" cy="140" r="52" fill="#ffffff" fill-opacity="0.94" stroke="#9b4df0" stroke-width="10"/>
+  <!-- face -->
+  <circle cx="132" cy="132" r="6" fill="#9b4df0"/>
+  <circle cx="168" cy="132" r="6" fill="#9b4df0"/>
+  <path d="M134 156 q 16 14 32 0" fill="none" stroke="#9b4df0" stroke-width="8" stroke-linecap="round"/>
+</svg>
