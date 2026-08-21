@@ -1,0 +1,75 @@
+/* ==========================================================================
+   Stories section
+   Loaded only while the stories listing is on screen. Reuses the shell's
+   design tokens from css/styles.css.
+   ========================================================================== */
+
+.story-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 × 2 on large displays */
+  gap: clamp(18px, 3vw, 32px);
+}
+
+@media (max-width: 720px) {
+  .story-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 × 3 on small displays */
+    gap: clamp(12px, 3vw, 20px);
+  }
+}
+
+.story-card a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 12px;
+  transition: transform 0.18s ease;
+}
+
+.story-card a:hover {
+  transform: translateY(-4px);
+}
+
+.story-card a:focus-visible {
+  outline: 3px solid var(--azure);
+  outline-offset: 4px;
+}
+
+/* 16:9 stage. Transparent art needs something to sit on, so the panel
+   supplies a soft backdrop rather than letting the artwork float on paper. */
+.story-card__art {
+  aspect-ratio: 16 / 9;
+  border: 3px solid var(--mustard);
+  border-radius: 12px;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 50% 100%, #fff 0%, var(--mustard-soft) 100%);
+  transition: box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.story-card a:hover .story-card__art {
+  border-color: var(--azure);
+  box-shadow: 4px 6px 0 rgb(46 155 230 / 0.3);
+}
+
+.story-card__art img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* contain, not cover — never crop the artwork */
+}
+
+.story-card__title {
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.story-card__tags {
+  margin-top: 2px;
+  font-size: clamp(0.78rem, 1.2vw, 0.9rem);
+  font-weight: 600;
+  color: var(--ink);
+  opacity: 0.55;
+}

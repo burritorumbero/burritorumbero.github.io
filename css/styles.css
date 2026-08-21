@@ -10,10 +10,10 @@
   --crimson: #e23b2e;
   --mustard: #b7a312;
   --mustard-soft: #f4efd3;
+  --green-logo: #84C38F;
   --lime: #7bc618;
   --lime-soft: #edf9db;
   --green: #37820f;
-  --green-logo: #84C38F;
   --azure: #2e9be6;
   --azure-deep: #1d7fc4;
   --violet: #9b4df0;
@@ -54,10 +54,12 @@ img {
   overflow: hidden;
   display: flex;
   /* Painted instantly, before the hero image arrives, so there is no white
+     flash and the white title text is readable from the first frame.
      Set this to the average colour of your own hero image. */
-  background: linear-gradient(to bottom, #5f5041, var(--paper));
+  background: linear-gradient(to bottom, #c92f22, var(--paper));
 }
- 
+
+/* Background image with the opacity fade: 100% at the top → 5% at the bottom */
 .hero__bg {
   position: absolute;
   inset: 0;
@@ -70,6 +72,7 @@ img {
 }
 
 /* --- Danmaku layer: above the hero image, below logo & button --- */
+
 .danmaku {
   position: absolute;
   inset: 0;
@@ -81,8 +84,8 @@ img {
 .danmaku__word {
   position: absolute;
   left: 100%;
-  opacity: 30%;
   white-space: nowrap;
+  opacity: 30%;
   font-family: var(--font-display);
   font-weight: 700;
   color: #fff;
@@ -125,7 +128,7 @@ img {
   flex-shrink: 0;
   width: clamp(84px, 12vw, 132px);
   aspect-ratio: 1;
-  padding: 0px;
+  padding: 10px;
   background: var(--green-logo);
   border: 4px solid var(--green-logo);
   border-radius: 10px;
@@ -226,11 +229,7 @@ img {
   border-top: 3px solid var(--lime);
   border-bottom: 3px solid var(--lime);
   overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.site-nav::-webkit-scrollbar {
-  display: none;
+  scrollbar-width: thin;
 }
 
 .site-nav ul {
@@ -305,7 +304,7 @@ img {
 .entry-card {
   border: 4px solid var(--mustard);
   border-radius: 12px;
-  background: var(--mustard-soft);
+  background: #fff;
   overflow: hidden;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
@@ -346,6 +345,18 @@ img {
   font-size: 0.95rem;
   border-top: 3px solid var(--mustard);
   background: var(--mustard-soft);
+}
+
+/* ==========================================================================
+   Page swap transition (SPA router)
+   ========================================================================== */
+
+.page {
+  transition: opacity 0.16s ease;
+}
+
+.page.is-leaving {
+  opacity: 0;
 }
 
 /* ==========================================================================
@@ -444,3 +455,4 @@ img {
     transform: none;
   }
 }
+

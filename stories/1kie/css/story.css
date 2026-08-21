@@ -1,0 +1,60 @@
+/* ==========================================================================
+   Single story page — loaded only while this story is open.
+   ========================================================================== */
+
+.story-back {
+  margin-bottom: 14px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.story-back a {
+  color: var(--green);
+  text-decoration: none;
+}
+
+.story-back a:hover {
+  text-decoration: underline;
+}
+
+.section-title + .story-meta {
+  margin-top: -18px;
+}
+
+.story-meta {
+  margin-bottom: 24px;
+  font-weight: 600;
+  opacity: 0.55;
+}
+
+.story-hero {
+  aspect-ratio: 16 / 9;
+  border: 3px solid var(--mustard);
+  border-radius: 14px;
+  overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 100%, #fff 0%, var(--mustard-soft) 100%);
+  margin-bottom: clamp(20px, 4vw, 36px);
+}
+
+.story-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.story-body {
+  max-width: 64ch;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.story-body p + p {
+  margin-top: 1.1em;
+}
+
+.story-body code {
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+  border-radius: 5px;
+  background: var(--mustard-soft);
+}
