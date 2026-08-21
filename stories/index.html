@@ -11,16 +11,13 @@
 
   <link rel="stylesheet" href="../css/styles.css">
 
-  <!-- Start the hero download in parallel with the CSS. Keep these values
-       identical to the winning <source> in the <picture> below, or the browser
-       downloads the hero twice. When you enable AVIF, update type + filenames. -->
   <link
     rel="preload"
     as="image"
-    type="image/webp"
-    imagesrcset="../assets/hero-1280.webp 1280w,
-                 ../assets/hero-1920.webp 1920w,
-                 ../assets/hero-2560.webp 2560w"
+    type="image/avif"
+    imagesrcset="../assets/hero-1280.avif 1280w,
+                 ../assets/hero-1920.avif 1920w,
+                 ../assets/hero-2560.avif 2560w"
     imagesizes="100vw"
     fetchpriority="high">
 
@@ -30,21 +27,13 @@
 
   <!-- ============ HERO ============ -->
   <header class="hero">
-    <!-- The opacity fade (100% top → 5% bottom) is applied in CSS via mask-image.
-         Generate the sized variants with tools/optimize-hero.sh.
-
-         IMPORTANT: uncomment the AVIF block only once the .avif files exist.
-         If a browser matches a <source> and the file 404s, it shows a broken
-         image — it does NOT fall through to the next <source>. -->
     <picture>
-      <!--
       <source
         type="image/avif"
         srcset="../assets/hero-1280.avif 1280w,
                 ../assets/hero-1920.avif 1920w,
                 ../assets/hero-2560.avif 2560w"
         sizes="100vw">
-      -->
       <source
         type="image/webp"
         srcset="../assets/hero-1280.webp 1280w,
