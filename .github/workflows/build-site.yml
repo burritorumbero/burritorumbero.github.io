@@ -31,6 +31,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install build dependencies
+        run: pip install -r tools/requirements.txt
+
       - name: Build story and chapter pages
         run: python3 tools/build-stories.py
 

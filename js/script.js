@@ -7,15 +7,17 @@
 const SITE_ROOT = (() => {
   const self =
     document.currentScript ||
-    [...document.querySelectorAll("script[src]")].find((s) => /js\/script\.js/.test(s.src));
+    [...document.querySelectorAll("script[src]")].find((s) =>
+      /js\/script\.js/.test(s.src),
+    );
   return self ? new URL("../", self.src).href : "/";
 })();
 
 const DANMAKU = {
-  wordsUrl: "words.txt",
-  spawnEvery: 1300,      // ms between new words (lower = denser)
-  minDuration: 8,        // seconds to cross the hero (fastest)
-  maxDuration: 14,       // seconds to cross the hero (slowest)
+  wordsUrl: SITE_ROOT + "words.txt",
+  spawnEvery: 1300, // ms between new words (lower = denser)
+  minDuration: 8, // seconds to cross the hero (fastest)
+  maxDuration: 14, // seconds to cross the hero (slowest)
   minFontRem: 1.0,
   maxFontRem: 1.6,
   topBandPercent: [8, 80], // vertical band (in % of hero height) words can occupy
@@ -24,9 +26,17 @@ const DANMAKU = {
   // from the file system, where browsers block fetch()). Serve the folder
   // with any local server — `python -m http.server` — and the .txt is used.
   fallbackWords: [
-    "hello!!", "so tall", "tiny city", "stomp stomp", "kaiju vibes",
-    "great render", "she's back!", "POV: ant", "amazing", "run!!"
-  ]
+    "hello!!",
+    "so tall",
+    "tiny city",
+    "stomp stomp",
+    "kaiju vibes",
+    "great render",
+    "she's back!",
+    "POV: ant",
+    "amazing",
+    "run!!",
+  ],
 };
 
 async function loadWords() {
@@ -52,10 +62,14 @@ function spawnWord(layer, word) {
   // Random lane + size + speed so simultaneous words don't stack
   const [bandTop, bandBottom] = DANMAKU.topBandPercent;
   el.style.top = `${bandTop + Math.random() * (bandBottom - bandTop)}%`;
-  el.style.fontSize = `${(DANMAKU.minFontRem +
-    Math.random() * (DANMAKU.maxFontRem - DANMAKU.minFontRem)).toFixed(2)}rem`;
-  el.style.animationDuration = `${(DANMAKU.minDuration +
-    Math.random() * (DANMAKU.maxDuration - DANMAKU.minDuration)).toFixed(2)}s`;
+  el.style.fontSize = `${(
+    DANMAKU.minFontRem +
+    Math.random() * (DANMAKU.maxFontRem - DANMAKU.minFontRem)
+  ).toFixed(2)}rem`;
+  el.style.animationDuration = `${(
+    DANMAKU.minDuration +
+    Math.random() * (DANMAKU.maxDuration - DANMAKU.minDuration)
+  ).toFixed(2)}s`;
 
   layer.appendChild(el);
 
@@ -105,9 +119,9 @@ document.addEventListener("DOMContentLoaded", startDanmaku);
    ========================================================================== */
 
 const MASCOT = {
-  bottomThreshold: 40,  // px from the page bottom that counts as "at the bottom"
-  bottomResetGap: 160,  // px you must scroll back up before it can shake again
-  hoverCooldown: 900    // ms before hovering can re-trigger the tilt
+  bottomThreshold: 40, // px from the page bottom that counts as "at the bottom"
+  bottomResetGap: 160, // px you must scroll back up before it can shake again
+  hoverCooldown: 900, // ms before hovering can re-trigger the tilt
 };
 
 function startMascot() {
@@ -133,34 +147,45 @@ function startMascot() {
   });
 
   // 1. Swing once, right after the slide-up finishes.
-  mascot.addEventListener("animationend", (e) => {
-    if (e.animationName === "mascot-rise") play("is-swinging");
-  }, { once: true });
+  mascot.addEventListener(
+    "animationend",
+    (e) => {
+      if (e.animationName === "mascot-rise") play("is-swinging");
+    },
+    { once: true },
+  );
 
   // 2. Hover tilt. The mascot has pointer-events: none so it never blocks
   //    clicks, so we test the cursor against its box instead of using :hover.
   let inside = false;
   let lastHover = 0;
 
-  window.addEventListener("mousemove", (e) => {
-    const box = mascot.getBoundingClientRect();
-    const over =
-      e.clientX >= box.left && e.clientX <= box.right &&
-      e.clientY >= box.top && e.clientY <= box.bottom;
+  window.addEventListener(
+    "mousemove",
+    (e) => {
+      const box = mascot.getBoundingClientRect();
+      const over =
+        e.clientX >= box.left &&
+        e.clientX <= box.right &&
+        e.clientY >= box.top &&
+        e.clientY <= box.bottom;
 
-    if (over && !inside && Date.now() - lastHover > MASCOT.hoverCooldown) {
-      lastHover = Date.now();
-      play("is-swinging");
-    }
-    inside = over;
-  }, { passive: true });
+      if (over && !inside && Date.now() - lastHover > MASCOT.hoverCooldown) {
+        lastHover = Date.now();
+        play("is-swinging");
+      }
+      inside = over;
+    },
+    { passive: true },
+  );
 
   // 3. Shake at the bottom of the page.
   let shakenAtBottom = false;
 
   const checkBottom = () => {
     const distanceToBottom =
-      document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
+      document.documentElement.scrollHeight -
+      (window.scrollY + window.innerHeight);
 
     if (distanceToBottom <= MASCOT.bottomThreshold && !shakenAtBottom) {
       shakenAtBottom = true;

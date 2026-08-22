@@ -1,0 +1,56 @@
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <picture>
+      <source
+        type="image/avif"
+        srcset="{{ root }}assets/hero-1280.avif 1280w,
+                {{ root }}assets/hero-1920.avif 1920w,
+                {{ root }}assets/hero-2560.avif 2560w"
+        sizes="100vw">
+      <source
+        type="image/webp"
+        srcset="{{ root }}assets/hero-1280.webp 1280w,
+                {{ root }}assets/hero-1920.webp 1920w,
+                {{ root }}assets/hero-2560.webp 2560w"
+        sizes="100vw">
+      <img
+        class="hero__bg"
+        src="{{ root }}assets/hero-placeholder.svg"
+        srcset="{{ root }}assets/hero-1280.jpg 1280w,
+                {{ root }}assets/hero-1920.jpg 1920w,
+                {{ root }}assets/hero-2560.jpg 2560w"
+        sizes="100vw"
+        width="2560" height="1350"
+        alt=""
+        fetchpriority="high"
+        decoding="async">
+    </picture>
+
+    <!-- Danmaku layer: words from words.txt fly right → left -->
+    <div class="danmaku" id="danmaku" aria-hidden="true"></div>
+
+    <div class="hero__content">
+      <div class="brand">
+        <span class="brand__frame">
+          <img src="{{ root }}assets/logo.png" alt="Burrito Rumbero logo">
+        </span>
+        <p class="brand__titles">
+          <span class="brand__name">Burrito Rumbero</span>
+          <span class="brand__tag">3D Giantess</span>
+        </p>
+      </div>
+
+      <a class="support-btn" href="https://ko-fi.com/burritorumbero" target="_blank" rel="noopener">Support Me</a>
+    </div>
+  </header>
+
+  <!-- ============ NAV ============ -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <ul>
+      <li><a href="{{ root }}index.html"{% if section == "home" %} class="is-current" aria-current="page"{% endif %}>Home</a></li>
+      <li><a href="{{ root }}stories/index.html"{% if section == "stories" %} class="is-current" aria-current="page"{% endif %}>Stories</a></li>
+      <li><a href="{{ root }}gallery/index.html"{% if section == "gallery" %} class="is-current" aria-current="page"{% endif %}>Gallery</a></li>
+      <li><a href="{{ root }}links/index.html"{% if section == "links" %} class="is-current" aria-current="page"{% endif %}>Links</a></li>
+      <li><a href="{{ root }}about/index.html"{% if section == "about" %} class="is-current" aria-current="page"{% endif %}>About</a></li>
+    </ul>
+  </nav>

@@ -1,0 +1,302 @@
+/* ==========================================================================
+   Story landing page — shared by every stories/<name>/index.html
+   Loaded by the router on entry, dropped on exit.
+   ========================================================================== */
+
+.story {
+  max-width: 900px;
+}
+
+/* --- back link ---------------------------------------------------------- */
+
+.story-back {
+  margin-bottom: 14px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.story-back a {
+  color: var(--green);
+  text-decoration: none;
+}
+
+.story-back a:hover {
+  text-decoration: underline;
+}
+
+/* --- 16:9 cover --------------------------------------------------------- */
+
+.story-cover {
+  aspect-ratio: 16 / 9;
+  border: 4px solid var(--mustard);
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(150deg, var(--mustard-soft), #fff 70%);
+}
+
+.story-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* transparent art is never cropped */
+}
+
+/* --- title -------------------------------------------------------------- */
+
+.story-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.7rem, 4.5vw, 2.6rem);
+  color: var(--green);
+  line-height: 1.15;
+  margin: clamp(16px, 3vw, 24px) 0 0;
+}
+
+/* --- genre / theme boxes (max 5) ---------------------------------------- */
+
+.story-genres {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.story-genres li {
+  padding: 9px 12px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+  color: var(--green);
+  background: var(--lime-soft);
+  border: 3px solid var(--lime);
+  border-radius: 999px;
+  box-shadow: 2px 2px 0 rgb(123 198 24 / 0.35);
+}
+
+/* --- release / status --------------------------------------------------- */
+
+.story-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px clamp(20px, 5vw, 48px);
+  margin: 20px 0 0;
+  font-weight: 700;
+  font-size: 0.98rem;
+}
+
+.story-details span {
+  opacity: 0.55;
+  font-weight: 600;
+}
+
+.story-details b {
+  font-weight: 800;
+}
+
+/* --- read buttons ------------------------------------------------------- */
+
+.story-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 22px 0 0;
+}
+
+.story-btn {
+  flex: 1 1 160px;
+  text-align: center;
+  padding: 0.75em 1.4em;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.02rem;
+  text-decoration: none;
+  color: #fff;
+  background: var(--azure);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 rgb(0 0 0 / 0.2);
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.story-btn--last {
+  background: var(--green);
+}
+
+.story-btn:hover,
+.story-btn:focus-visible {
+  transform: translate(-1px, -2px);
+  box-shadow: 5px 5px 0 rgb(0 0 0 / 0.2);
+}
+
+.story-btn:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* --- synopsis with 4-line clamp ----------------------------------------- */
+
+.story-about {
+  margin: 30px 0 0;
+}
+
+.story-about h3,
+.story-chapters h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--green);
+  margin-bottom: 10px;
+}
+
+.story-synopsis {
+  line-height: 1.65;
+  white-space: pre-line; /* keeps paragraph breaks from the source text */
+}
+
+.story-synopsis.is-clamped {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
+}
+
+.story-toggle {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 2px;
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--green);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.story-toggle:hover {
+  text-decoration: underline;
+}
+
+.story-toggle[hidden] {
+  display: none;
+}
+
+/* --- chapter table ------------------------------------------------------ */
+
+.story-chapters {
+  margin: 34px 0 0;
+}
+
+.chapter-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 3px solid var(--mustard);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.chapter-table th,
+.chapter-table td {
+  text-align: left;
+  padding: 11px 14px;
+  border-bottom: 2px solid var(--mustard-soft);
+}
+
+.chapter-table th {
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--green);
+  background: var(--mustard-soft);
+}
+
+.chapter-table th:last-child,
+.chapter-table td:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.chapter-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.chapter-table tbody tr:hover {
+  background: #fffdf2;
+}
+
+.chapter-table a {
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.chapter-table a:hover {
+  color: var(--green);
+  text-decoration: underline;
+}
+
+.chapter-table td time {
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+/* Rows past the default 9 stay in the HTML (so they work without JS
+   and are indexable) but are hidden until "Show more" is pressed. */
+.chapter-table tr.is-extra {
+  display: none;
+}
+
+.chapter-table.is-expanded tr.is-extra {
+  display: table-row;
+}
+
+@media (max-width: 520px) {
+  .chapter-table th,
+  .chapter-table td {
+    padding: 9px 10px;
+    font-size: 0.94rem;
+  }
+}
+
+/* --- chapter reading page ----------------------------------------------- */
+
+.chapter-body {
+  max-width: 68ch;
+  line-height: 1.75;
+}
+
+.chapter-body p {
+  margin-bottom: 1.05em;
+}
+
+.chapter-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 40px;
+  padding-top: 18px;
+  border-top: 3px solid var(--mustard-soft);
+  font-weight: 700;
+}
+
+.chapter-nav a {
+  color: var(--green);
+  text-decoration: none;
+}
+
+.chapter-nav a:hover {
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-btn:hover {
+    transform: none;
+  }
+}

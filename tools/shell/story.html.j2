@@ -1,0 +1,105 @@
+{% extends "base.html.j2" %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{{ root }}stories/css/story.css">
+{%- if cover.preload %}
+
+  {# The cover is this page's hook. This preload mirrors the first <source>
+     below exactly — same format, same srcset — or the browser fetches twice. #}
+  <link
+    rel="preload"
+    as="image"
+    type="{{ cover.preload.mime }}"
+    imagesrcset="{{ cover.preload.srcset }}"
+    imagesizes="{{ cover.sizes }}"
+    fetchpriority="high">
+{%- endif %}
+{% endblock %}
+
+{% block content %}
+    <article class="story">
+      <p class="story-back"><a href="../index.html">← All stories</a></p>
+
+      <div class="story-cover">
+        {%- if cover.img %}
+        <picture>
+          {%- for source in cover.sources %}
+          <source
+            type="{{ source.mime }}"
+            srcset="{{ source.srcset }}"
+            sizes="{{ cover.sizes }}">
+          {%- endfor %}
+          <img
+            src="{{ cover.img.src }}"
+            srcset="{{ cover.img.srcset }}"
+            sizes="{{ cover.sizes }}"
+            width="1600" height="900"
+            alt="{{ story.title }} cover art"
+            fetchpriority="high"
+            decoding="async">
+        </picture>
+        {%- else %}
+        {# No assets/cover-*.{avif,webp,jpg} found for this story. #}
+        {%- endif %}
+      </div>
+
+      <h2 class="story-title">{{ story.title }}</h2>
+
+      {%- if story.genres %}
+      <ul class="story-genres">
+        {%- for genre in story.genres %}
+        <li>{{ genre }}</li>
+        {%- endfor %}
+      </ul>
+      {%- endif %}
+
+      <p class="story-details">
+        <span>Release:</span> <b>{{ story.release }}</b>
+        <span>Status:</span> <b>{{ story.status }}</b>
+      </p>
+
+      {%- if chapters %}
+      <div class="story-actions">
+        <a class="story-btn" href="chapters/{{ chapters[-1].id }}/index.html">Read First</a>
+        <a class="story-btn story-btn--last" href="chapters/{{ chapters[0].id }}/index.html">Read Last</a>
+      </div>
+      {%- endif %}
+
+      <section class="story-about">
+        <h3>About</h3>
+        <p class="story-synopsis">{{ story.synopsis }}</p>
+        <button class="story-toggle story-toggle--synopsis" type="button"
+                aria-expanded="false" hidden>Show more ⬇️</button>
+      </section>
+
+      <section class="story-chapters">
+        <h3>Chapters</h3>
+        <table class="chapter-table">
+          <thead>
+            <tr>
+              <th scope="col">Chapter name</th>
+              <th scope="col">Time uploaded</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for chapter in chapters %}
+            {# Rows past the first `visible` stay in the HTML but are hidden by
+               CSS, so they work without JS and stay indexable. #}
+            <tr{% if loop.index0 >= visible %} class="is-extra"{% endif %}>
+              <td><a href="chapters/{{ chapter.id }}/index.html">{{ chapter.title }}</a></td>
+              <td><time datetime="{{ chapter.iso }}">{{ chapter.human }}</time></td>
+            </tr>
+            {%- else %}
+            <tr><td colspan="2">No chapters yet.</td></tr>
+            {%- endfor %}
+          </tbody>
+        </table>
+        <button class="story-toggle story-toggle--chapters" type="button"
+                aria-expanded="false" hidden>Show more ⬇️</button>
+      </section>
+    </article>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ root }}stories/js/story.js"></script>
+{% endblock %}

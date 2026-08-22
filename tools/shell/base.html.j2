@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }}</title>
+
+{% include "head.html.j2" %}
+{%- block head_extra %}{% endblock %}
+</head>
+<body>
+
+{% include "header.html.j2" %}
+  <!-- ===== SWAPPABLE REGION =====
+       The router replaces everything inside #page. Everything outside it comes
+       from tools/shell/ — edit the templates there, not this file. -->
+  <main class="page" id="page">
+{% block content %}{% endblock %}
+  </main>
+
+{% include "footer.html.j2" %}
+{%- block scripts %}{% endblock %}
+</body>
+</html>

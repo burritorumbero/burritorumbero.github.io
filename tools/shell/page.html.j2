@@ -1,0 +1,8 @@
+{# Used by build-shell.py for pages you author by hand (home, gallery, links,
+   about, the stories index). Their <main> content, page-specific <link> tags
+   and <script> tags are lifted out of the existing file and re-inserted. #}
+{% extends "base.html.j2" %}
+
+{% block head_extra %}{{ head_extra }}{% endblock %}
+{% block content %}{{ content }}{% endblock %}
+{% block scripts %}{{ scripts }}{% endblock %}
