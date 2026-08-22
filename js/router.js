@@ -38,10 +38,10 @@
 
   // Assets present on first load belong to the shell and are never removed.
   const shellCss = new Set(
-    [...document.querySelectorAll('link[rel="stylesheet"]')].map((l) => l.href)
+    [...document.querySelectorAll('link[rel="stylesheet"]')].map((l) => l.href),
   );
   const shellJs = new Set(
-    [...document.querySelectorAll("script[src]")].map((s) => s.src)
+    [...document.querySelectorAll("script[src]")].map((s) => s.src),
   );
 
   const cache = new Map(); // url -> html, filled by prefetch on hover
@@ -58,10 +58,10 @@
   // once, on first load, while the base URL is still correct.
   function freezeShellLinks() {
     document.querySelectorAll("a[href]").forEach((a) => {
-      if (container.contains(a)) return;      // swapped content is rewritten separately
+      if (container.contains(a)) return; // swapped content is rewritten separately
       const raw = a.getAttribute("href");
       if (raw.startsWith("#") || /^[a-z]+:/i.test(raw)) return;
-      a.setAttribute("href", a.href);         // .href is already resolved correctly
+      a.setAttribute("href", a.href); // .href is already resolved correctly
     });
   }
 
@@ -125,7 +125,7 @@
     });
 
     const present = new Set(
-      [...document.querySelectorAll("link[data-spa-css]")].map((l) => l.href)
+      [...document.querySelectorAll("link[data-spa-css]")].map((l) => l.href),
     );
 
     await Promise.all(wanted.filter((h) => !present.has(h)).map(loadCss));
@@ -144,23 +144,40 @@
     for (const src of wanted) await loadJs(src);
   }
 
+  // Which section a URL belongs to: /stories/sundays/ -> "stories", / -> "".
+  // Matching on the section rather than the exact URL means deep pages
+  // (a story, a chapter) still light up the right nav item.
+  function sectionOf(url) {
+    const parts = new URL(url, location.href).pathname
+      .split("/")
+      .filter(Boolean);
+    const first = parts[0] || "";
+    return first.endsWith(".html") ? "" : first;
+  }
+
   function setActiveNav(url) {
+    const here = sectionOf(url);
     document.querySelectorAll(".site-nav a").forEach((a) => {
-      a.classList.toggle("is-current", a.href === url);
-      if (a.href === url) a.setAttribute("aria-current", "page");
+      const match = sectionOf(a.href) === here;
+      a.classList.toggle("is-current", match);
+      if (match) a.setAttribute("aria-current", "page");
       else a.removeAttribute("aria-current");
     });
   }
 
   /* ------------------------------------------------------------- navigation */
 
+  // Returns { html, url }. The url is the URL *after* any redirect, which
+  // matters: a link written as "sundays" makes the server redirect to
+  // "sundays/", and resolving relative paths against the pre-redirect URL
+  // puts everything one directory too high.
   async function fetchPage(url) {
     if (cache.has(url)) return cache.get(url);
     const res = await fetch(url, { headers: { "X-Requested-With": "spa" } });
     if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-    const html = await res.text();
-    cache.set(url, html);
-    return html;
+    const page = { html: await res.text(), url: res.url || url };
+    cache.set(url, page);
+    return page;
   }
 
   async function navigate(url, { push = true } = {}) {
@@ -168,9 +185,9 @@
     container.setAttribute("aria-busy", "true");
     container.classList.add("is-leaving");
 
-    let html;
+    let page;
     try {
-      html = await fetchPage(url);
+      page = await fetchPage(url);
     } catch (err) {
       // Fall back to a normal page load rather than stranding the visitor.
       window.location.href = url;
@@ -179,8 +196,11 @@
 
     if (token !== currentRequest) return; // a newer click won
 
-    const doc = new DOMParser().parseFromString(html, "text/html");
-    const base = new URL(url, location.href);
+    // Everything downstream uses the post-redirect URL, so "sundays",
+    // "sundays/" and "sundays/index.html" all behave identically.
+    const finalUrl = page.url;
+    const doc = new DOMParser().parseFromString(page.html, "text/html");
+    const base = new URL(finalUrl, location.href);
     const next = doc.getElementById(CONTAINER_ID) || doc.querySelector("main");
 
     if (!next) {
@@ -192,7 +212,11 @@
 
     // Let the outgoing section stop its own timers and listeners.
     if (typeof window.__spaCleanup === "function") {
-      try { window.__spaCleanup(); } catch (e) { console.error(e); }
+      try {
+        window.__spaCleanup();
+      } catch (e) {
+        console.error(e);
+      }
     }
     delete window.__spaCleanup;
 
@@ -203,10 +227,13 @@
     container.className = next.className;
     document.title = doc.title;
 
-    if (push) history.pushState({ url }, "", url);
-    setActiveNav(new URL(url, location.href).href);
+    if (push) history.pushState({ url: finalUrl }, "", finalUrl);
+    setActiveNav(base.href);
 
-    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+    window.scrollTo({
+      top: 0,
+      behavior: "instant" in window ? "instant" : "auto",
+    });
 
     await syncJs(doc, base);
     if (token !== currentRequest) return;
@@ -222,7 +249,9 @@
       heading.focus({ preventScroll: true });
     }
 
-    document.dispatchEvent(new CustomEvent("spa:navigated", { detail: { url } }));
+    document.dispatchEvent(
+      new CustomEvent("spa:navigated", { detail: { url } }),
+    );
   }
 
   /* ----------------------------------------------------------- link binding */
@@ -230,7 +259,8 @@
   const isInternal = (link) => {
     if (!link || !link.href) return false;
     if (link.origin !== location.origin) return false;
-    if (link.hasAttribute("download") || link.hasAttribute("data-no-spa")) return false;
+    if (link.hasAttribute("download") || link.hasAttribute("data-no-spa"))
+      return false;
     if (link.target && link.target !== "_self") return false;
     // Pure in-page anchors are left to the browser.
     if (link.hash && link.pathname === location.pathname) return false;
@@ -243,7 +273,10 @@
 
     const link = e.target.closest("a");
     if (!isInternal(link)) return;
-    if (link.href === location.href) { e.preventDefault(); return; }
+    if (link.href === location.href) {
+      e.preventDefault();
+      return;
+    }
 
     e.preventDefault();
     navigate(link.href);
