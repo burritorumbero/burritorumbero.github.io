@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/styles.css">
+
   <link
     rel="preload"
     as="image"
@@ -19,12 +21,12 @@
                  assets/hero-2560.avif 2560w"
     imagesizes="100vw"
     fetchpriority="high">
+
 </head>
 <body>
 
   <!-- ============ HERO ============ -->
   <header class="hero">
-    
     <picture>
       <source
         type="image/avif"
@@ -51,12 +53,12 @@
         decoding="async">
     </picture>
 
+    <!-- Danmaku layer: words from words.txt fly right → left -->
     <div class="danmaku" id="danmaku" aria-hidden="true"></div>
 
     <div class="hero__content">
       <div class="brand">
         <span class="brand__frame">
-          <!-- Swap this src for your 1:1 logo -->
           <img src="assets/logo.png" alt="Burrito Rumbero logo">
         </span>
         <p class="brand__titles">
@@ -65,23 +67,24 @@
         </p>
       </div>
 
-      <!-- Change href to your support page URL -->
-      <a class="support-btn" href="https://example.com/support" target="_blank" rel="noopener">Support Me</a>
+      <a class="support-btn" href="https://ko-fi.com/burritorumbero" target="_blank" rel="noopener">Support Me</a>
     </div>
   </header>
 
   <!-- ============ NAV ============ -->
   <nav class="site-nav" aria-label="Main navigation">
     <ul>
-      <li><a href="" class="is-current" aria-current="page">Home</a></li>
-      <li><a href="stories/">Stories</a></li>
-      <li><a href="gallery/">Gallery</a></li>
-      <li><a href="links/">Links</a></li>
-      <li><a href="about/">About</a></li>
+      <li><a href="index.html" class="is-current" aria-current="page">Home</a></li>
+      <li><a href="stories/index.html">Stories</a></li>
+      <li><a href="gallery/index.html">Gallery</a></li>
+      <li><a href="links/index.html">Links</a></li>
+      <li><a href="about/index.html">About</a></li>
     </ul>
   </nav>
 
-  <!-- ============ LATEST ENTRIES ============ -->
+  <!-- ===== SWAPPABLE REGION =====
+       The router replaces everything inside #page. Everything outside it comes
+       from tools/shell/ — edit the templates there, not this file. -->
   <main class="page" id="page">
     <h2 class="section-title">Latest Entries</h2>
 
@@ -147,13 +150,12 @@
   </footer>
 
   <!-- ============ MASCOT ============ -->
-  <!-- Slides up on load and swings once. Tilts again on hover, shakes at page bottom.
-       Swap the inner src for your transparent-background image. -->
   <div class="mascot" id="mascot">
     <img src="assets/rep1.png" alt="">
   </div>
 
   <script src="js/script.js"></script>
   <script src="js/router.js"></script>
+
 </body>
 </html>
