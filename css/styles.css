@@ -10,7 +10,7 @@
   --crimson: #e23b2e;
   --mustard: #b7a312;
   --mustard-soft: #f4efd3;
-  --green-logo: #84C38F;
+  --green-logo: #84c38f;
   --lime: #7bc618;
   --lime-soft: #edf9db;
   --green: #37820f;
@@ -56,7 +56,7 @@ img {
   /* Painted instantly, before the hero image arrives, so there is no white
      flash and the white title text is readable from the first frame.
      Set this to the average colour of your own hero image. */
-  background: linear-gradient(to bottom, #c92f22, var(--paper));
+  background: linear-gradient(to bottom, #6f5e57ff, var(--paper));
 }
 
 /* Background image with the opacity fade: 100% at the top → 5% at the bottom */
@@ -67,8 +67,16 @@ img {
   height: 100%;
   object-fit: cover;
   z-index: 0;
-  -webkit-mask-image: linear-gradient(to bottom, rgb(0 0 0 / 1) 0%, rgb(0 0 0 / 0.05) 100%);
-  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 1) 0%, rgb(0 0 0 / 0.05) 100%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgb(0 0 0 / 1) 0%,
+    rgb(0 0 0 / 0.05) 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgb(0 0 0 / 1) 0%,
+    rgb(0 0 0 / 0.05) 100%
+  );
 }
 
 /* --- Danmaku layer: above the hero image, below logo & button --- */
@@ -91,10 +99,14 @@ img {
   color: #fff;
   /* bilibili-style outline so words stay readable over any hero image */
   text-shadow:
-    -2px -2px 0 var(--ink), 2px -2px 0 var(--ink),
-    -2px  2px 0 var(--ink), 2px  2px 0 var(--ink),
-    -2px  0   0 var(--ink), 2px  0   0 var(--ink),
-     0   -2px 0 var(--ink), 0    2px 0 var(--ink);
+    -2px -2px 0 var(--ink),
+    2px -2px 0 var(--ink),
+    -2px 2px 0 var(--ink),
+    2px 2px 0 var(--ink),
+    -2px 0 0 var(--ink),
+    2px 0 0 var(--ink),
+    0 -2px 0 var(--ink),
+    0 2px 0 var(--ink);
   will-change: transform;
   animation-name: danmaku-fly;
   animation-timing-function: linear;
@@ -147,7 +159,9 @@ img {
   font-family: var(--font-display);
   line-height: 1.1;
   color: #fff;
-  text-shadow: 0 2px 10px rgb(0 0 0 / 0.45), 0 0 2px rgb(0 0 0 / 0.6);
+  text-shadow:
+    0 2px 10px rgb(0 0 0 / 0.45),
+    0 0 2px rgb(0 0 0 / 0.6);
 }
 
 .brand__name {
@@ -172,11 +186,14 @@ img {
   letter-spacing: 0.03em;
   color: #fff;
   text-decoration: none;
-  background: var(--azure);
+  background: var(--green);
   padding: 0.7em 1.7em;
   border-radius: 999px;
   box-shadow: 3px 3px 0 rgb(0 0 0 / 0.22);
-  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 /* Marching dots: a dashed gradient ring masked to the border area only,
@@ -193,10 +210,14 @@ img {
     transparent 9px 18px
   );
   background-size: 18px 100%;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
-          mask-composite: exclude;
+  mask-composite: exclude;
   animation: marching-dots 0.9s linear infinite;
   pointer-events: none;
 }
@@ -229,7 +250,11 @@ img {
   border-top: 3px solid var(--lime);
   border-bottom: 3px solid var(--lime);
   overflow-x: auto;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.site-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .site-nav ul {
@@ -252,7 +277,9 @@ img {
   text-transform: uppercase;
   text-decoration: none;
   color: var(--green);
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .site-nav a:hover,
@@ -304,9 +331,11 @@ img {
 .entry-card {
   border: 4px solid var(--mustard);
   border-radius: 12px;
-  background: #fff;
+  background: var(--mustard-soft);
   overflow: hidden;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .entry-card:hover {
@@ -327,10 +356,11 @@ img {
 
 .entry-card__thumb {
   aspect-ratio: 1;
-  background:
-    repeating-linear-gradient(45deg,
-      var(--mustard-soft) 0 14px,
-      #fff 14px 28px);
+  background: repeating-linear-gradient(
+    45deg,
+    var(--mustard-soft) 0 14px,
+    #fff 14px 28px
+  );
 }
 
 .entry-card__thumb img {
@@ -388,7 +418,9 @@ img {
 }
 
 @keyframes mascot-rise {
-  to { transform: translateY(0); }
+  to {
+    transform: translateY(0);
+  }
 }
 
 /* Inner image owns every rotation, so slide and swing never fight. */
@@ -404,11 +436,21 @@ img {
 }
 
 @keyframes mascot-swing {
-  0%   { transform: rotate(0deg); }
-  25%  { transform: rotate(-6deg); }
-  55%  { transform: rotate(5deg); }
-  80%  { transform: rotate(-2deg); }
-  100% { transform: rotate(0deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-6deg);
+  }
+  55% {
+    transform: rotate(5deg);
+  }
+  80% {
+    transform: rotate(-2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
 
 /* Bottom-of-page shake: quick, small, side to side. */
@@ -417,12 +459,25 @@ img {
 }
 
 @keyframes mascot-shake {
-  0%, 100% { transform: translateX(0); }
-  15%      { transform: translateX(-7px); }
-  35%      { transform: translateX(6px); }
-  55%      { transform: translateX(-4px); }
-  75%      { transform: translateX(3px); }
-  90%      { transform: translateX(-1px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  15% {
+    transform: translateX(-7px);
+  }
+  35% {
+    transform: translateX(6px);
+  }
+  55% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+  90% {
+    transform: translateX(-1px);
+  }
 }
 
 /* ==========================================================================
@@ -455,4 +510,3 @@ img {
     transform: none;
   }
 }
-

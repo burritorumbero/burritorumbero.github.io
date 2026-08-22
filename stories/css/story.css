@@ -28,10 +28,8 @@
 
 .story-cover {
   aspect-ratio: 16 / 9;
-  border: 4px solid var(--mustard);
   border-radius: 14px;
   overflow: hidden;
-  background: linear-gradient(150deg, var(--mustard-soft), #fff 70%);
 }
 
 .story-cover img {
