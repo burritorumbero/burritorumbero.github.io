@@ -37,13 +37,17 @@
 /* 16:9 stage. Transparent art needs something to sit on, so the panel
    supplies a soft backdrop rather than letting the artwork float on paper. */
 .story-card__art {
-  aspect-ratio: 16 / 9;
   border: 3px solid var(--mustard);
   border-radius: 12px;
   overflow: hidden;
-  background:
-    radial-gradient(120% 90% at 50% 100%, #fff 0%, var(--mustard-soft) 100%);
-  transition: box-shadow 0.18s ease, border-color 0.18s ease;
+  background: radial-gradient(
+    120% 90% at 50% 100%,
+    #fff 0%,
+    var(--mustard-soft) 100%
+  );
+  transition:
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
 }
 
 .story-card a:hover .story-card__art {
