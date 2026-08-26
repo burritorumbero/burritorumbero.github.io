@@ -1,0 +1,39 @@
+{% extends "base.html.j2" %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{{ root }}stories/css/story.css">
+  <link rel="stylesheet" href="{{ root }}gallery/css/gallery.css">
+{% endblock %}
+
+{% block content %}
+    <article class="story">
+      <p class="story-back"><a href="../index.html">← {{ comic.title }}</a></p>
+      <h2 class="story-title">{{ comic.title }} — all pages</h2>
+
+      {# Every thumbnail is in the HTML (crawlable, works without JS), but only
+         the first batch is visible; browse.js reveals the rest as you scroll.
+         loading="lazy" keeps hidden/off-screen thumbs from downloading. #}
+      <div class="browse-grid" id="browse" data-batch="{{ batch }}">
+        {%- for page in pages_desc %}
+        <a class="browse-item{% if loop.index0 >= batch %} is-pending{% endif %}"
+           href="../read/index.html#{{ page.number }}">
+          <img src="../pages/thumbnails/{{ page.thumb }}"
+               alt="Page {{ page.number }}"
+               width="480" height="720"
+               loading="lazy"
+               decoding="async">
+          <span class="browse-item__label">Page {{ page.number }}</span>
+        </a>
+        {%- endfor %}
+      </div>
+
+      <div class="browse-sentinel" id="browse-sentinel">
+        <span class="browse-spinner" aria-hidden="true"></span>
+        <span>Loading more…</span>
+      </div>
+    </article>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ root }}gallery/js/browse.js"></script>
+{% endblock %}

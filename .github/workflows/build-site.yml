@@ -11,6 +11,8 @@ on:
       - "stories/**/drafts/**"
       - "stories/**/story.json"
       - "stories/**/assets/**"
+      - "gallery/**/gallery.json"
+      - "gallery/**/assets/**"
       - "tools/**"
   workflow_dispatch: {}
 
@@ -19,7 +21,7 @@ permissions:
 
 concurrency:
   group: build-site
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -37,6 +39,9 @@ jobs:
       - name: Build story and chapter pages
         run: python3 tools/build-stories.py
 
+      - name: Build gallery pages
+        run: python3 tools/build-gallery.py || true
+
       - name: Stamp the shared shell into every page
         run: python3 tools/build-shell.py
 
@@ -49,5 +54,6 @@ jobs:
             echo "Nothing changed."
           else
             git commit -m "Rebuild pages [skip ci]"
+            git pull --rebase origin main
             git push
           fi

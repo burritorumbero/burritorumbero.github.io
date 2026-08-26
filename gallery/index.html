@@ -12,28 +12,40 @@
 
   <link rel="stylesheet" href="../css/styles.css">
 
+  <!-- Start the hero download in parallel with the CSS. Keep these values
+       identical to the winning <source> in the <picture> below, or the browser
+       downloads the hero twice. When you enable AVIF, update type + filenames. -->
   <link
     rel="preload"
     as="image"
-    type="image/avif"
-    imagesrcset="../assets/hero-1280.avif 1280w,
-                 ../assets/hero-1920.avif 1920w,
-                 ../assets/hero-2560.avif 2560w"
+    type="image/webp"
+    imagesrcset="../assets/hero-1280.webp 1280w,
+                 ../assets/hero-1920.webp 1920w,
+                 ../assets/hero-2560.webp 2560w"
     imagesizes="100vw"
     fetchpriority="high">
 
+  <link rel="stylesheet" href="../stories/css/stories.css">
 </head>
 <body>
 
   <!-- ============ HERO ============ -->
   <header class="hero">
+    <!-- The opacity fade (100% top → 5% bottom) is applied in CSS via mask-image.
+         Generate the sized variants with tools/optimize-hero.sh.
+
+         IMPORTANT: uncomment the AVIF block only once the .avif files exist.
+         If a browser matches a <source> and the file 404s, it shows a broken
+         image — it does NOT fall through to the next <source>. -->
     <picture>
+      <!--
       <source
         type="image/avif"
         srcset="../assets/hero-1280.avif 1280w,
                 ../assets/hero-1920.avif 1920w,
                 ../assets/hero-2560.avif 2560w"
         sizes="100vw">
+      -->
       <source
         type="image/webp"
         srcset="../assets/hero-1280.webp 1280w,
@@ -59,7 +71,7 @@
     <div class="hero__content">
       <div class="brand">
         <span class="brand__frame">
-          <img src="../assets/logo.png" alt="Burrito Rumbero logo">
+          <img src="../assets/logo-placeholder.svg" alt="Burrito Rumbero logo">
         </span>
         <p class="brand__titles">
           <span class="brand__name">Burrito Rumbero</span>
@@ -67,7 +79,7 @@
         </p>
       </div>
 
-      <a class="support-btn" href="https://ko-fi.com/burritorumbero" target="_blank" rel="noopener">Support Me</a>
+      <a class="support-btn" href="https://example.com/support" target="_blank" rel="noopener">Support Me</a>
     </div>
   </header>
 
@@ -87,7 +99,20 @@
        from tools/shell/ — edit the templates there, not this file. -->
   <main class="page" id="page">
     <h2 class="section-title">Gallery</h2>
-    <p>Nothing here yet. Add a grid of renders, plus <code>gallery/css/</code> and <code>gallery/js/</code> if this section needs its own styles or behaviour.</p>
+
+    <section class="story-grid">
+      <!-- One card per comic: 16:9 art in gallery/art/, link to the comic folder. -->
+      <article class="story-card">
+        <a href="sample/index.html">
+          <div class="story-card__art">
+            <img src="art/sample.webp" alt="" width="1200" height="675"
+                 loading="lazy" decoding="async">
+          </div>
+          <h3 class="story-card__title">Sample Comic</h3>
+          <p class="story-card__tags">demo, replace me</p>
+        </a>
+      </article>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -96,7 +121,7 @@
 
   <!-- ============ MASCOT ============ -->
   <div class="mascot" id="mascot">
-    <img src="../assets/rep1.png" alt="">
+    <img src="../assets/mascot-placeholder.svg" alt="">
   </div>
 
   <script src="../js/script.js"></script>

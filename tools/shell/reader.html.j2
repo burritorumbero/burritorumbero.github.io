@@ -1,0 +1,26 @@
+{% extends "base.html.j2" %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{{ root }}gallery/css/gallery.css">
+{% endblock %}
+
+{% block content %}
+    {# The manifest is embedded as data so the reader works as a static page:
+       no runtime directory listing exists on GitHub Pages. Paths resolve
+       against this page's URL, so ../pages/ is this comic's pages folder. #}
+    <div class="reader"
+         id="reader"
+         data-pages="{{ pages | tojson | forceescape }}"
+         data-base="../pages/"
+         data-exit="../index.html"
+         data-title="{{ comic.title }}">
+      <p class="reader__fallback">
+        This reader needs JavaScript. The pages themselves are plain images:
+        <a href="../pages/{{ pages[0] }}">open the first page directly</a>.
+      </p>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ root }}gallery/js/reader.js"></script>
+{% endblock %}
