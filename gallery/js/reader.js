@@ -2,9 +2,14 @@
    Fullscreen comic reader.
    Phones: swipe left = next page, swipe right = previous.
    Keyboards + pointers: on-screen arrows and ← / → keys.
-   The current page number lives in the URL hash (#3), so a page can be
-   linked, refreshed and shared. Neighbouring pages are preloaded so paging
-   feels instant.
+
+   Pages are served responsively: each has AVIF and WebP copies at several
+   widths, and the browser picks one to match the screen, so a phone never
+   downloads a desktop-sized page. Neighbours are preloaded through the same
+   srcset, so the preload fetches the same file the display will use.
+
+   The current page number lives in the URL hash (#3) so a page can be linked,
+   refreshed and shared.
    Re-run by the router on every visit → IIFE + __spaCleanup.
    ========================================================================== */
 
@@ -15,12 +20,37 @@
   if (!host) return;
 
   var pages = JSON.parse(host.dataset.pages || "[]");
-  var base = host.dataset.base || "";
   if (!pages.length) return;
 
-  var PRELOAD_AHEAD = 2;  // pages fetched beyond the one on screen
+  var PRELOAD_AHEAD = 2;   // pages fetched beyond the one on screen
   var PRELOAD_BEHIND = 1;
-  var SWIPE_MIN_PX = 45;  // shorter drags are taps/scroll noise
+  var SWIPE_MIN_PX = 45;   // shorter drags are taps or scroll noise
+  var SIZES = "100vw";     // the reader fills the viewport
+
+  /* ------------------------------------------------- format choice (once)
+
+     A single <img> can only carry one srcset, so rather than juggling
+     <source> elements on every page turn we decide AVIF-vs-WebP once and use
+     that format throughout. Deciding up front is also what lets preloading
+     work: an off-DOM Image with the same srcset+sizes resolves to the same
+     candidate the visible <img> will request, so the preload is a cache hit
+     rather than a second download. */
+
+  var AVIF_PROBE =
+    "data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAEAAAABAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIABoAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgABogQEDQgMgkQAAAAB8dSLfI=";
+
+  function pickFormat() {
+    return new Promise(function (resolve) {
+      // No AVIF variants generated at all? Don't bother probing.
+      var anyAvif = pages.some(function (p) { return p.v && p.v.avif; });
+      if (!anyAvif) return resolve("webp");
+
+      var probe = new Image();
+      probe.onload = function () { resolve("avif"); };
+      probe.onerror = function () { resolve("webp"); };
+      probe.src = AVIF_PROBE;
+    });
+  }
 
   /* ---------------------------------------------------------------- build UI */
 
@@ -35,6 +65,7 @@
   var img = document.createElement("img");
   img.className = "reader__img";
   img.alt = "";
+  img.sizes = SIZES;
 
   var spinner = document.createElement("span");
   spinner.className = "reader__spinner";
@@ -57,17 +88,18 @@
 
   host.append(back, spinner, img, prevBtn, nextBtn, counter);
 
-  // The reader owns the whole viewport; stop the page behind it scrolling.
   var previousOverflow = document.documentElement.style.overflow;
   document.documentElement.style.overflow = "hidden";
 
   /* ------------------------------------------------------------------ state */
 
-  var current = 0;                 // 0-based index into pages
+  var current = 0;
+  var format = "webp";
   var preloaded = Object.create(null);
 
-  function urlFor(i) {
-    return base + pages[i];
+  function srcsetFor(i) {
+    var v = pages[i].v || {};
+    return v[format] || v.webp || v.avif || "";
   }
 
   function clamp(i) {
@@ -83,8 +115,14 @@
     for (var d = -PRELOAD_BEHIND; d <= PRELOAD_AHEAD; d++) {
       var j = i + d;
       if (j < 0 || j >= pages.length || j === i || preloaded[j]) continue;
-      preloaded[j] = new Image();
-      preloaded[j].src = urlFor(j);
+
+      var im = new Image();
+      im.sizes = SIZES;
+      var set = srcsetFor(j);
+      // srcset must be set before src, or the browser may commit to src first.
+      if (set) im.srcset = set;
+      im.src = pages[j].src;   // fallback candidate / no-variant case
+      preloaded[j] = im;
     }
   }
 
@@ -93,7 +131,11 @@
 
     img.classList.add("is-loading");
     spinner.hidden = false;
-    img.src = urlFor(current);
+
+    var set = srcsetFor(current);
+    img.removeAttribute("srcset");
+    if (set) img.srcset = set;
+    img.src = pages[current].src;
 
     var done = function () {
       img.classList.remove("is-loading");
@@ -106,8 +148,8 @@
     prevBtn.disabled = current === 0;
     nextBtn.disabled = current === pages.length - 1;
 
-    // replaceState rather than pushState: the browser back button should
-    // leave the reader, not retrace every page turned.
+    // replaceState, not pushState: the back button should leave the reader,
+    // not retrace every page turned.
     if (replaceHash !== false) {
       history.replaceState(history.state, "", "#" + (current + 1));
     }
@@ -131,7 +173,6 @@
   }
   document.addEventListener("keydown", onKey);
 
-  // Swipe: horizontal drags only, so vertical pans and pinch-zoom stay native.
   var touchX = null, touchY = null;
 
   function onTouchStart(e) {
@@ -152,13 +193,15 @@
   host.addEventListener("touchstart", onTouchStart, { passive: true });
   host.addEventListener("touchend", onTouchEnd, { passive: true });
 
-  // Hash edited by hand, or arriving from a browse-page link.
   function onHashChange() { show(pageFromHash(), false); }
   window.addEventListener("hashchange", onHashChange);
 
   /* ---------------------------------------------------------------- start */
 
-  show(pageFromHash());
+  pickFormat().then(function (chosen) {
+    format = chosen;
+    show(pageFromHash());
+  });
 
   window.__spaCleanup = function () {
     document.removeEventListener("keydown", onKey);

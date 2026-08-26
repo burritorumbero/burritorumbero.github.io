@@ -1,4 +1,4 @@
-name: Comic thumbnails
+name: Comic images
 
 # When comic pages are pushed to gallery/<name>/pages/, generate their
 # thumbnails and rebuild the gallery pages, then commit the results.
@@ -13,6 +13,9 @@ on:
     paths:
       - "gallery/**/pages/**"
       - "gallery/**/gallery.json"
+      # Generated output is excluded so this job cannot retrigger itself.
+      - "!gallery/**/pages/thumbnails/**"
+      - "!gallery/**/pages/variants/**"
   workflow_dispatch: {}
 
 permissions:
@@ -33,10 +36,15 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install -r tools/requirements.txt pillow
+        run: pip install -r tools/requirements.txt
 
       - name: Generate thumbnails
         run: python3 tools/make-thumbnails.py
+
+      # Resized AVIF/WebP copies of each page, so the reader serves a size
+      # that matches the screen instead of the full-resolution original.
+      - name: Generate responsive page variants
+        run: python3 tools/make-page-variants.py
 
       - name: Rebuild gallery pages
         run: python3 tools/build-gallery.py
@@ -52,7 +60,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "Nothing changed."
           else
-            git commit -m "Build thumbnails + gallery pages [skip ci]"
+            git commit -m "Build comic images + gallery pages [skip ci]"
             git pull --rebase origin main
             git push
           fi

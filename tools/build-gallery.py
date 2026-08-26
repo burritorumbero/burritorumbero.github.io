@@ -36,6 +36,29 @@ BROWSE_BATCH = 12   # thumbnails revealed per scroll batch
 MAX_GENRES = 5
 
 
+VARIANT_WIDTHS = (960, 1440, 1920, 2560)
+VARIANT_FORMATS = ("avif", "webp")
+
+
+def page_variants(pages_dir: Path, stem: str) -> dict:
+    """srcset strings per format for one page, from files that exist.
+
+    Paths are relative to the reader page (gallery/<name>/read/), which is why
+    they start with ../pages/.
+    """
+    variants_dir = pages_dir / "variants"
+    out = {}
+    for ext in VARIANT_FORMATS:
+        entries = [
+            f"../pages/variants/{stem}-{w}.{ext} {w}w"
+            for w in VARIANT_WIDTHS
+            if (variants_dir / f"{stem}-{w}.{ext}").is_file()
+        ]
+        if entries:
+            out[ext] = ", ".join(entries)
+    return out
+
+
 def list_pages(comic_dir: Path) -> list:
     """Numerically-named images in pages/, sorted 1, 2, … 10 (not 1, 10, 2)."""
     pages_dir = comic_dir / "pages"
@@ -52,6 +75,20 @@ def list_pages(comic_dir: Path) -> list:
         found.append(f)
 
     thumbs = comic_dir / "pages" / "thumbnails"
+
+    # Thumbnail dimensions come from the manifest make-thumbnails.py writes,
+    # so the browse grid matches the comic's real page shape (landscape,
+    # portrait or square) instead of assuming one.
+    sizes = {}
+    manifest_path = thumbs / ".manifest.json"
+    if manifest_path.is_file():
+        try:
+            for stem, entry in json.loads(manifest_path.read_text()).items():
+                if isinstance(entry, dict) and entry.get("size"):
+                    sizes[stem] = entry["size"]
+        except json.JSONDecodeError:
+            pass
+
     pages = []
     for f in sorted(found, key=lambda p: int(p.stem)):
         thumb = thumbs / f"{f.stem}.webp"
@@ -61,6 +98,10 @@ def list_pages(comic_dir: Path) -> list:
             # Browse falls back to the original if the thumbnail isn't built
             # yet — slower, but never a broken image.
             "thumb": thumb.name if thumb.is_file() else f"../{f.name}",
+            "thumb_w": sizes.get(f.stem, [480, 720])[0],
+            "thumb_h": sizes.get(f.stem, [480, 720])[1],
+            # Reader falls back to the original the same way.
+            "variants": page_variants(pages_dir, f.stem),
         })
     return pages
 
@@ -95,6 +136,11 @@ def build() -> int:
         if missing:
             print(f"    ! {missing} page(s) have no thumbnail yet "
                   f"(run tools/make-thumbnails.py)")
+        no_variants = sum(1 for p in pages if not p["variants"])
+        if no_variants:
+            print(f"    ! {no_variants} page(s) have no resized variants — the "
+                  f"reader will serve the full-size originals "
+                  f"(run tools/make-page-variants.py)")
 
         comic = {
             "title": meta.get("title", comic_dir.name),
@@ -118,7 +164,9 @@ def build() -> int:
         emit(comic_dir / "read" / "index.html", reader_tpl.render(
             title=f"Read {comic['title']} — Burrito Rumbero",
             root=root_prefix(rel), section=section_for(rel),
-            comic=comic, pages=[p["file"] for p in pages],
+            comic=comic,
+            pages=[{"n": p["number"], "src": "../pages/" + p["file"],
+                    "v": p["variants"]} for p in pages],
         ))
 
         rel = (comic_dir / "browse" / "index.html").relative_to(ROOT)

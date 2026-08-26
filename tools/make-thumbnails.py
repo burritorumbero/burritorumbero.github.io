@@ -64,7 +64,8 @@ def build() -> int:
             out = thumbs_dir / f"{stem}.webp"
             digest = source_hash(src)
 
-            if out.is_file() and manifest.get(stem) == digest:
+            entry = manifest.get(stem)
+            if out.is_file() and isinstance(entry, dict) and entry.get("hash") == digest:
                 kept += 1
                 continue
 
@@ -75,8 +76,11 @@ def build() -> int:
                     im = im.resize((THUMB_WIDTH, round(im.height * ratio)),
                                    Image.LANCZOS)
                 im.save(out, "WEBP", quality=THUMB_QUALITY, method=6)
+                size = [im.width, im.height]
 
-            manifest[stem] = digest
+            # Dimensions are recorded so build-gallery.py can set the grid's
+            # aspect ratio without needing Pillow itself.
+            manifest[stem] = {"hash": digest, "size": size}
             made += 1
             print(f"  → {out.relative_to(ROOT)}")
 

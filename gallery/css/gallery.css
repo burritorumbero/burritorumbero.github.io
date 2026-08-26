@@ -176,11 +176,12 @@
   outline-offset: 2px;
 }
 
+/* No fixed aspect-ratio here: each thumbnail carries its real width/height
+   attributes, so the grid takes the comic's own page shape — landscape,
+   portrait or square — and reserves the right space before it loads. */
 .browse-item img {
   width: 100%;
-  height: auto; /* override the height attribute so aspect-ratio wins */
-  aspect-ratio: 2 / 3;
-  object-fit: cover;
+  height: auto;
   display: block;
   background: var(--mustard-soft);
 }
