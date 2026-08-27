@@ -28,7 +28,8 @@ import sys
 from pathlib import Path
 
 from buildlib import (GALLERY_MARKER, ROOT, cover_data, make_env,
-                      root_prefix, section_for, write_if_changed)
+                      pick_page_files, root_prefix, section_for,
+                      write_if_changed)
 
 GALLERY = ROOT / "gallery"
 PAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp", ".avif")
@@ -65,14 +66,9 @@ def list_pages(comic_dir: Path) -> list:
     if not pages_dir.is_dir():
         return []
 
-    found = []
-    for f in pages_dir.iterdir():
-        if not f.is_file() or f.suffix.lower() not in PAGE_EXTS:
-            continue
-        if not re.fullmatch(r"\d+", f.stem):
-            print(f"    ! pages/{f.name}: name isn't a number, skipped")
-            continue
-        found.append(f)
+    # One file per page *number* — 1.png and 1.webp are the same page in two
+    # formats, and only the preferred one is served.
+    found = list(pick_page_files(pages_dir).values())
 
     thumbs = comic_dir / "pages" / "thumbnails"
 

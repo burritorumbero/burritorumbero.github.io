@@ -24,11 +24,12 @@ every file looks freshly modified. Variants whose source is gone are deleted.
 
 import hashlib
 import json
-import re
 import sys
 from pathlib import Path
 
 from PIL import Image
+
+from buildlib import pick_page_files
 
 ROOT = Path(__file__).resolve().parent.parent
 GALLERY = ROOT / "gallery"
@@ -66,11 +67,7 @@ def build() -> int:
             except json.JSONDecodeError:
                 manifest = {}
 
-        sources = {
-            f.stem: f for f in pages_dir.iterdir()
-            if f.is_file() and f.suffix.lower() in PAGE_EXTS
-            and re.fullmatch(r"\d+", f.stem)
-        }
+        sources = pick_page_files(pages_dir)
 
         if sources:
             print(f"  {pages_dir.parent.name}: {len(sources)} page(s)")
