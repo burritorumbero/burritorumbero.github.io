@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }}</title>
+  {# Three layers, most immediate first:
+     1. JS location.replace — instant, and keeps this page out of history so
+        the back button doesn't bounce through the redirect.
+     2. meta refresh — no-JS fallback.
+     3. A visible link — in case both are disabled.
+     Deliberately no <main class="page">: the SPA router treats a page without
+     one as "not mine" and hands it to the browser, so the redirect always
+     runs as a real navigation. #}
+  <meta http-equiv="refresh" content="0; url={{ target }}">
+  <script>location.replace("{{ target }}");</script>
+</head>
+<body>
+  <p><a href="{{ target }}">Continue to the latest {{ kind }} →</a></p>
+</body>
+</html>

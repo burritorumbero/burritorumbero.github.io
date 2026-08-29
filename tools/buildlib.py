@@ -87,6 +87,18 @@ def write_if_changed(path: Path, text: str) -> bool:
     return True
 
 
+MASCOT_EXTS = (".webp", ".png", ".svg", ".avif", ".gif")
+
+
+def find_mascot(content_dir: Path) -> Path | None:
+    """A story's or comic's own mascot: assets/mascot.<ext>, if present."""
+    for ext in MASCOT_EXTS:
+        candidate = content_dir / "assets" / f"mascot{ext}"
+        if candidate.is_file():
+            return candidate
+    return None
+
+
 # Most-optimized first. When the same page exists in several formats, the
 # first match is the one served and the rest are ignored.
 PAGE_EXT_PREFERENCE = (".avif", ".webp", ".jpg", ".jpeg", ".png")

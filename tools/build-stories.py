@@ -32,8 +32,8 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from buildlib import (GENERATED_MARKER, ROOT, cover_data, make_env,
-                      root_prefix, section_for, write_if_changed)
+from buildlib import (GENERATED_MARKER, ROOT, cover_data, find_mascot,
+                      make_env, root_prefix, section_for, write_if_changed)
 
 STORIES = ROOT / "stories"
 
@@ -90,6 +90,7 @@ def build() -> int:
     env = make_env()
     story_tpl = env.get_template("story.html.j2")
     chapter_tpl = env.get_template("chapter.html.j2")
+    redirect_tpl = env.get_template("redirect.html.j2")
 
     story_dirs = sorted(p.parent for p in STORIES.glob("*/story.json"))
     if not story_dirs:
@@ -119,11 +120,20 @@ def build() -> int:
             "synopsis": meta.get("synopsis", ""),
         }
 
+        # This story's own mascot (assets/mascot.*), shown on the landing
+        # page and every chapter. Falls back to the site mascot when absent.
+        mascot = find_mascot(story_dir)
+        mascot_rel = str(mascot.relative_to(ROOT)) if mascot else None
+
+        def mascot_for(rel_page):
+            return root_prefix(rel_page) + mascot_rel if mascot_rel else None
+
         rel = (story_dir / "index.html").relative_to(ROOT)
         page = story_tpl.render(
             title=f"{story['title']} — Burrito Rumbero",
             root=root_prefix(rel),
             section=section_for(rel),
+            mascot_src=mascot_for(rel),
             story=story,
             chapters=newest_first,
             visible=VISIBLE_CHAPTERS,
@@ -140,6 +150,7 @@ def build() -> int:
                 title=f"{chapter['title']} — {story['title']}",
                 root=root_prefix(rel),
                 section=section_for(rel),
+                mascot_src=mascot_for(rel),
                 story=story,
                 chapter=chapter,
                 prev=oldest_first[i - 1] if i > 0 else None,
@@ -148,6 +159,19 @@ def build() -> int:
             if write_if_changed(out, GENERATED_MARKER + "\n" + page):
                 written += 1
                 print(f"    → {rel}")
+
+        # stories/<name>/latest -> the most recent chapter. Regenerated on
+        # every build, so it always follows the newest published date.
+        if newest_first:
+            out = story_dir / "latest" / "index.html"
+            page = redirect_tpl.render(
+                title=f"Latest chapter — {story['title']}",
+                target=f"../chapters/{newest_first[0]['id']}/index.html",
+                kind="chapter",
+            )
+            if write_if_changed(out, GENERATED_MARKER + "\n" + page):
+                written += 1
+                print(f"    → {out.relative_to(ROOT)}")
 
     print(f"\n{written} file(s) written"
           f"{'' if written else ' — everything already up to date'}.")

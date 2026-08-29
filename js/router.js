@@ -212,6 +212,17 @@
 
     resolveUrls(next, base);
 
+    // The mascot lives in the shell, which persists across navigations — but
+    // stories and comics can declare their own. The fetched document carries
+    // the mascot that page would show on a direct load, so mirror it into
+    // the live shell whenever it differs.
+    const incomingMascot = doc.querySelector("#mascot img");
+    const liveMascot = document.querySelector("#mascot img");
+    if (incomingMascot && liveMascot) {
+      const nextSrc = new URL(incomingMascot.getAttribute("src") || "", base).href;
+      if (liveMascot.src !== nextSrc) liveMascot.src = nextSrc;
+    }
+
     // Let the outgoing section stop its own timers and listeners.
     if (typeof window.__spaCleanup === "function") {
       try { window.__spaCleanup(); } catch (e) { console.error(e); }

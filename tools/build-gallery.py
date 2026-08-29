@@ -27,8 +27,8 @@ import re
 import sys
 from pathlib import Path
 
-from buildlib import (GALLERY_MARKER, ROOT, cover_data, make_env,
-                      pick_page_files, root_prefix, section_for,
+from buildlib import (GALLERY_MARKER, ROOT, cover_data, find_mascot,
+                      make_env, pick_page_files, root_prefix, section_for,
                       write_if_changed)
 
 GALLERY = ROOT / "gallery"
@@ -107,6 +107,7 @@ def build() -> int:
     landing_tpl = env.get_template("gallery.html.j2")
     reader_tpl = env.get_template("reader.html.j2")
     browse_tpl = env.get_template("browse.html.j2")
+    redirect_tpl = env.get_template("redirect.html.j2")
 
     comic_dirs = sorted(p.parent for p in GALLERY.glob("*/gallery.json"))
     if not comic_dirs:
@@ -146,11 +147,17 @@ def build() -> int:
             "synopsis": meta.get("synopsis", ""),
         }
 
+        # This comic's own mascot (assets/mascot.*) appears on the landing
+        # page only — the reader and browse pages keep the site default.
+        mascot = find_mascot(comic_dir)
+
         rel = (comic_dir / "index.html").relative_to(ROOT)
         emit(comic_dir / "index.html", landing_tpl.render(
             title=f"{comic['title']} — Burrito Rumbero",
             root=root_prefix(rel), section=section_for(rel),
             comic=comic, pages=pages, cover=cover_data(comic_dir),
+            mascot_src=(root_prefix(rel) + str(mascot.relative_to(ROOT))
+                        if mascot else None),
         ))
 
         if not pages:
@@ -170,6 +177,13 @@ def build() -> int:
             title=f"Browse {comic['title']} — Burrito Rumbero",
             root=root_prefix(rel), section=section_for(rel),
             comic=comic, pages_desc=list(reversed(pages)), batch=BROWSE_BATCH,
+        ))
+
+        # gallery/<name>/latest -> the most recent page, in the reader.
+        emit(comic_dir / "latest" / "index.html", redirect_tpl.render(
+            title=f"Latest page — {comic['title']}",
+            target=f"../read/index.html#{pages[-1]['number']}",
+            kind="page",
         ))
 
     print(f"\n{written} file(s) written"

@@ -3,8 +3,11 @@
   </footer>
 
   <!-- ============ MASCOT ============ -->
+  {# mascot_src lets a story or comic bring its own mascot; everything else
+     gets the site default. The router watches this img across SPA
+     navigations and swaps it when a page declares a different one. #}
   <div class="mascot" id="mascot">
-    <img src="{{ root }}assets/rep1.png" alt="">
+    <img src="{{ mascot_src | default(root ~ 'assets/mascot-placeholder.svg') }}" alt="">
   </div>
 
   <script src="{{ root }}js/script.js"></script>
