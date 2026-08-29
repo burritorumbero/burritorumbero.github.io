@@ -1,110 +1,91 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BurritoR | 3D GTS</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BurritoR | 3D GTS</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css">
 
-    <link
-      rel="preload"
-      as="image"
-      type="image/avif"
-      imagesrcset="assets/hero-1280.avif 1280w,
+  <link
+    rel="preload"
+    as="image"
+    type="image/avif"
+    imagesrcset="assets/hero-1280.avif 1280w,
                  assets/hero-1920.avif 1920w,
                  assets/hero-2560.avif 2560w"
-      imagesizes="100vw"
-      fetchpriority="high"
-    />
-  </head>
-  <body>
-    <!-- ============ HERO ============ -->
-    <header class="hero">
-      <picture>
-        <source
-          type="image/avif"
-          srcset="
-            assets/hero-1280.avif 1280w,
-            assets/hero-1920.avif 1920w,
-            assets/hero-2560.avif 2560w
-          "
-          sizes="100vw"
-        />
-        <source
-          type="image/webp"
-          srcset="
-            assets/hero-1280.webp 1280w,
-            assets/hero-1920.webp 1920w,
-            assets/hero-2560.webp 2560w
-          "
-          sizes="100vw"
-        />
-        <img
-          class="hero__bg"
-          src="assets/hero-placeholder.svg"
-          srcset="
-            assets/hero-1280.jpg 1280w,
-            assets/hero-1920.jpg 1920w,
-            assets/hero-2560.jpg 2560w
-          "
-          sizes="100vw"
-          width="2560"
-          height="1350"
-          alt=""
-          fetchpriority="high"
-          decoding="async"
-        />
-      </picture>
+    imagesizes="100vw"
+    fetchpriority="high">
 
-      <!-- Danmaku layer: words from words.txt fly right → left -->
-      <div class="danmaku" id="danmaku" aria-hidden="true"></div>
+</head>
+<body>
 
-      <div class="hero__content">
-        <div class="brand">
-          <span class="brand__frame">
-            <img src="assets/logo.png" alt="Burrito Rumbero logo" />
-          </span>
-          <p class="brand__titles">
-            <span class="brand__name">Burrito Rumbero</span>
-            <span class="brand__tag">3D Giantess</span>
-          </p>
-        </div>
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <picture>
+      <source
+        type="image/avif"
+        srcset="assets/hero-1280.avif 1280w,
+                assets/hero-1920.avif 1920w,
+                assets/hero-2560.avif 2560w"
+        sizes="100vw">
+      <source
+        type="image/webp"
+        srcset="assets/hero-1280.webp 1280w,
+                assets/hero-1920.webp 1920w,
+                assets/hero-2560.webp 2560w"
+        sizes="100vw">
+      <img
+        class="hero__bg"
+        src="assets/hero-placeholder.svg"
+        srcset="assets/hero-1280.jpg 1280w,
+                assets/hero-1920.jpg 1920w,
+                assets/hero-2560.jpg 2560w"
+        sizes="100vw"
+        width="2560" height="1350"
+        alt=""
+        fetchpriority="high"
+        decoding="async">
+    </picture>
 
-        <a
-          class="support-btn"
-          href="https://ko-fi.com/burritorumbero"
-          target="_blank"
-          rel="noopener"
-          >Support Me</a
-        >
+    <!-- Danmaku layer: words from words.txt fly right → left -->
+    <div class="danmaku" id="danmaku" aria-hidden="true"></div>
+
+    <div class="hero__content">
+      <div class="brand">
+        <span class="brand__frame">
+          <img src="assets/logo.png" alt="Burrito Rumbero logo">
+        </span>
+        <p class="brand__titles">
+          <span class="brand__name">Burrito Rumbero</span>
+          <span class="brand__tag">3D Giantess</span>
+        </p>
       </div>
-    </header>
 
-    <!-- ============ NAV ============ -->
-    <nav class="site-nav" aria-label="Main navigation">
-      <ul>
-        <li>
-          <a href="index.html" class="is-current" aria-current="page">Home</a>
-        </li>
-        <li><a href="stories/index.html">Stories</a></li>
-        <li><a href="gallery/index.html">Gallery</a></li>
-        <li><a href="links/index.html">Links</a></li>
-        <li><a href="about/index.html">About</a></li>
-      </ul>
-    </nav>
+      <a class="support-btn" href="https://ko-fi.com/burritorumbero" target="_blank" rel="noopener">Support Me</a>
+    </div>
+  </header>
 
-    <!-- ===== SWAPPABLE REGION =====
+  <!-- ============ NAV ============ -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <ul>
+      <li><a href="index.html" class="is-current" aria-current="page">Home</a></li>
+      <li><a href="stories/index.html">Stories</a></li>
+      <li><a href="gallery/index.html">Gallery</a></li>
+      <li><a href="links/index.html">Links</a></li>
+      <li><a href="about/index.html">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== SWAPPABLE REGION =====
        The router replaces everything inside #page. Everything outside it comes
        from tools/shell/ — edit the templates there, not this file. -->
-    <main class="page" id="page">
+  <main class="page" id="page">
       <h2 class="section-title">Latest Entries</h2>
 
       <section class="entries">
@@ -199,19 +180,20 @@
           </a>
         </article>
       </section>
-    </main>
+  </main>
 
-    <footer class="site-footer">
-      <p>© 2026 Burrito Rumbero</p>
-    </footer>
+  <footer class="site-footer">
+    <p>© 2026 Burrito Rumbero</p>
+  </footer>
 
-    <!-- ============ MASCOT ============ -->
+  <!-- ============ MASCOT ============ -->
+  
+  <div class="mascot" id="mascot">
+    <img src="assets/mascot-placeholder.svg" alt="">
+  </div>
 
-    <div class="mascot" id="mascot">
-      <img src="assets/mascot.webp" alt="" />
-    </div>
+  <script src="js/script.js"></script>
+  <script src="js/router.js"></script>
 
-    <script src="js/script.js"></script>
-    <script src="js/router.js"></script>
-  </body>
+</body>
 </html>
